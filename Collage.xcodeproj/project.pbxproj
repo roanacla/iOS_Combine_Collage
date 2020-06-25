@@ -33,7 +33,7 @@
 		9C055EC022DDD51A00EB2066 /* UIImage+Collage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Collage.swift"; sourceTree = "<group>"; };
 		9C055EC222DDD52B00EB2066 /* PhotoWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = PhotoWriter.swift; sourceTree = "<group>"; tabWidth = 2; };
 		9C055EC422DDD81900EB2066 /* PHPhotoLibrary+Combine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PHPhotoLibrary+Combine.swift"; sourceTree = "<group>"; };
-		9C4A011822DE6A1E00F8732E /* UIViewController+Combine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Combine.swift"; sourceTree = "<group>"; };
+		9C4A011822DE6A1E00F8732E /* UIViewController+Combine.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = "UIViewController+Combine.swift"; sourceTree = "<group>"; tabWidth = 2; };
 		9C4A011A22DF004300F8732E /* PhotosViewController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		9C4A011C22DF00F800F8732E /* PhotoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
