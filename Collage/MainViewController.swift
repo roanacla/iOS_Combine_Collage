@@ -111,7 +111,7 @@ class MainViewController: UIViewController {
 
     navigationController!.pushViewController(photos, animated: true)
     //Subscribe to the publisher of a child view controller
-    let newPhotos = photos.selectedPhotos
+    let newPhotos = photos.selectedPhotos.share()
 
     newPhotos
       .map { [unowned self] newImage in
@@ -125,12 +125,6 @@ class MainViewController: UIViewController {
   }
   
   private func showMessage(_ title: String, description: String? = nil) {
-//    let alert = UIAlertController(title: title, message: description, preferredStyle: .alert)
-//    alert.addAction(UIAlertAction(title: "Close", style: .default, handler: { alert in
-//      self.dismiss(animated: true, completion: nil)
-//    }))
-//    present(alert, animated: true, completion: nil)
-    
     alert(title: title, text: description)
       .sink(receiveValue: { _ in })
       .store(in: &subscriptions)
