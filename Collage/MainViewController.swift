@@ -87,7 +87,19 @@ class MainViewController: UIViewController {
   
   @IBAction func actionSave() {
     guard let image = imagePreview.image else { return }
-    
+    // 1
+    PhotoWriter.save(image)
+      .sink(receiveCompletion: { [unowned self] completion in
+        // 2
+        if case .failure(let error) = completion {
+          self.showMessage("Error", description: error.localizedDescription)
+        }
+        self.actionClear()
+      }, receiveValue: { [unowned self] id in
+        // 3
+        self.showMessage("Saved with id: \(id)")
+      })
+      .store(in: &subscriptions)
   }
   
   @IBAction func actionAdd() {

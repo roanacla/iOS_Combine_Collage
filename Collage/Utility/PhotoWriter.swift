@@ -38,4 +38,27 @@ class PhotoWriter {
     case generic(Swift.Error)
   }
   
+  static func save(_ image: UIImage) -> Future<String, PhotoWriter.Error> {
+    return Future { resolve in
+      do {
+        try PHPhotoLibrary.shared().performChangesAndWait {
+          // 1 Create a request to store the image
+          let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
+          
+          // 2 create a the new's asset identifier
+          guard let savedAssetID =
+            request.placeholderForCreatedAsset?.localIdentifier else {
+            // 3 If you didn't get an identifier you will thrown an error
+            return resolve(.failure(.couldNotSavePhoto))
+          }
+
+          // 4 If the AssetID is not null.. you resolve the future publihser with success. 
+          resolve(.success(savedAssetID))
+        }
+      } catch {
+        //Since you don't know the exact errors that could be thrown while saving the photo, you just take the thrown error and wrap it as a PhotoWriter.Error.generic error.
+        resolve(.failure(.generic(error)))
+      }
+    }
+  }
 }
