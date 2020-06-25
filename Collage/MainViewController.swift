@@ -34,8 +34,8 @@ class MainViewController: UIViewController {
   
   //MARK: - Properties
     
-  private var subscriptions = Set<AnyCancellable>()
-  private let images = CurrentValueSubject<[UIImage], Never>([])
+  private var subscriptions = Set<AnyCancellable>() //Here you will store any UI susbscription so you can delete all subscription when this view is gone
+  private let images = CurrentValueSubject<[UIImage], Never>([]) //
   
     // MARK: - Outlets
 
@@ -56,6 +56,19 @@ class MainViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     let collageSize = imagePreview.frame.size
+    // 1
+    images
+//      .handleEvents(receiveOutput: { [weak self] photos in
+//        self?.updateUI(photos: photos)
+//      })
+      // 2 sends every image to a method <collage> which is an extension of UIImage.
+      .map { photos in
+        UIImage.collage(images: photos, size: collageSize)
+      }
+      // 3 assign the resulting image to imagePreview.
+      .assign(to: \.image, on: imagePreview)
+      // 4
+      .store(in: &subscriptions)
     
   }
   
@@ -69,7 +82,7 @@ class MainViewController: UIViewController {
   // MARK: - Actions
   
   @IBAction func actionClear() {
-    
+    images.send([]) //justs sends and empty array
   }
   
   @IBAction func actionSave() {
@@ -78,7 +91,25 @@ class MainViewController: UIViewController {
   }
   
   @IBAction func actionAdd() {
+//    let newImages = images.value + [UIImage(named: "IMG_1907.jpg")!]
+//    images.send(newImages)
     
+    let photos = storyboard!.instantiateViewController(
+      withIdentifier: "PhotosViewController") as! PhotosViewController
+
+    navigationController!.pushViewController(photos, animated: true)
+    //Subscribe to the publisher of a child view controller
+    let newPhotos = photos.selectedPhotos
+
+    newPhotos
+      .map { [unowned self] newImage in
+      // 1
+        return self.images.value + [newImage]
+      }
+      // 2
+      .assign(to: \.value, on: images)
+      // 3
+      .store(in: &subscriptions)
   }
   
   private func showMessage(_ title: String, description: String? = nil) {

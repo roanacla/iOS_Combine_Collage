@@ -28,13 +28,19 @@
 
 import UIKit
 import Photos
+import Combine
 
 class PhotosViewController: UICollectionViewController {
   
   // MARK: - Public properties
-  
+  // These two properties <selectedPhotos> and <selectedPhotosSubject> are public and private respectively so the consumers don't know what type of publisher is <selectedPhotosSubject>
+  var selectedPhotos: AnyPublisher<UIImage, Never> {
+    return selectedPhotosSubject.eraseToAnyPublisher()
+  }
   
   // MARK: - Private properties
+    
+  private let selectedPhotosSubject = PassthroughSubject<UIImage, Never>()
     
   private lazy var photos = PhotosViewController.loadPhotos()
   private lazy var imageManager = PHCachingImageManager()
@@ -64,6 +70,7 @@ class PhotosViewController: UICollectionViewController {
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
+    selectedPhotosSubject.send(completion: .finished)//this line finishes the publisher. 
   }
     
   // MARK: - UICollectionViewDataSource
@@ -107,6 +114,7 @@ class PhotosViewController: UICollectionViewController {
       }
       
       // Send the selected photo
+      self.selectedPhotosSubject.send(image)
       
     })
   }
