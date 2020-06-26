@@ -115,9 +115,14 @@ class MainViewController: UIViewController {
       .assign(to: \.title , on: self)
       .store(in: &subscriptions)
     
+    
     navigationController!.pushViewController(photos, animated: true)
     //Subscribe to the publisher of a child view controller
-    let newPhotos = photos.selectedPhotos.share()
+    let newPhotos = photos.selectedPhotos
+      .prefix(while: { [unowned self] _ in
+        return self.images.value.count < 6
+      })
+      .share()
 
     newPhotos
       .map { [unowned self] newImage in
@@ -127,6 +132,14 @@ class MainViewController: UIViewController {
       // 2
       .assign(to: \.value, on: images)
       // 3
+      .store(in: &subscriptions)
+    
+    newPhotos
+      .ignoreOutput() //Ignores the emmited values. It only provides a completion event to the subscriber.
+      .delay(for: 2.0, scheduler: DispatchQueue.main) // waits a given amount of sencods.
+      .sink(receiveCompletion: { [unowned self] _ in
+        self.updateUI(photos: self.images.value)
+        }, receiveValue: { _ in })
       .store(in: &subscriptions)
   }
   
