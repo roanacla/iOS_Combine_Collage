@@ -37,6 +37,7 @@ class PhotosViewController: UICollectionViewController {
   var selectedPhotos: AnyPublisher<UIImage, Never> {
     return selectedPhotosSubject.eraseToAnyPublisher()
   }
+  @Published var selectedPhotosCount = 0
   
   // MARK: - Private properties
     
@@ -115,6 +116,7 @@ class PhotosViewController: UICollectionViewController {
       
       // Send the selected photo
       self.selectedPhotosSubject.send(image)
+      self.selectedPhotosCount += 1
       
     })
   }
